@@ -17,7 +17,7 @@ RUN dotnet publish "MemoriesApp.Api.csproj" -c Release -o /app/publish /p:UseApp
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
 # Set environment variables for Render (optional but good practice)
 ENV ASPNETCORE_URLS=http://+:8080
