@@ -1,0 +1,11 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  gap: 12px;
+  color: #666;
+  color: #FD7979;
+}
+

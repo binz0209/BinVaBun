@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  /* ── Core Liquid Glass Palette (Spatial Dark Theme by default for immersive feel, or Light) ── */
+  /* We'll use a sophisticated dark/light adaptive approach. Defaulting to a deep, spatial dark mode for max luxury */
+  --color-bg-base:      #FDF2F4; /* Premium Soft Pink */
+  --color-bg-elevated:  #FFFFFF;
+  
+  /* Glass Layers (Dynamic Translucency) */
+  --surface-glass-1:    rgba(255, 255, 255, 0.3);
+  --surface-glass-2:    rgba(255, 255, 255, 0.5);
+  --surface-glass-3:    rgba(255, 255, 255, 0.7);
+  --surface-glass-4:    rgba(255, 255, 255, 0.9);
+  
+  /* Borders / Edge Lighting */
+  --edge-light:         rgba(255, 255, 255, 0.8);
+  --edge-light-subtle:  rgba(255, 255, 255, 0.4);
+  --edge-dark:          rgba(0, 0, 0, 0.1);
+
+  /* Accents */
+  --color-accent:       #E8647C; /* Keeping the core romantic accent, but muted for elegance */
+  --color-accent-glow:  rgba(232, 100, 124, 0.3);
+  
+  /* Text */
+  --text-primary:       rgba(0, 0, 0, 0.9);
+  --text-secondary:     rgba(0, 0, 0, 0.6);
+  --text-tertiary:      rgba(0, 0, 0, 0.4);
+
+  /* ── Typography System (Apple SF Pro Style) ── */
+  --font-display:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  --font-body:     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  
+  /* Fluid font sizes mimicking iOS guidelines */
+  --text-xs:    clamp(0.75rem, 0.5vi + 0.6rem, 0.8125rem); /* 13px */
+  --text-sm:    clamp(0.875rem, 0.6vi + 0.7rem, 0.9375rem); /* 15px */
+  --text-base:  clamp(1rem, 0.8vi + 0.8rem, 1.0625rem);    /* 17px */
+  --text-lg:    clamp(1.125rem, 1vi + 0.8rem, 1.25rem);    /* 20px */
+  --text-xl:    clamp(1.375rem, 1.2vi + 0.9rem, 1.5rem);   /* 24px */
+  --text-2xl:   clamp(1.75rem, 1.5vi + 1rem, 2rem);        /* 32px */
+  --text-3xl:   clamp(2.5rem, 2vi + 1rem, 3rem);           /* 48px */
+  --text-hero:  clamp(3.5rem, 4vi + 1.5rem, 4.5rem);       /* 72px */
+  
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+  
+  /* ── Spacing (8px Grid) ── */
+  --space-1:   0.25rem;   /* 4px */
+  --space-2:   0.5rem;    /* 8px */
+  --space-3:   0.75rem;   /* 12px */
+  --space-4:   1rem;      /* 16px */
+  --space-5:   1.25rem;   /* 20px */
+  --space-6:   1.5rem;    /* 24px */
+  --space-8:   2rem;      /* 32px */
+  --space-10:  2.5rem;    /* 40px */
+  --space-12:  3rem;      /* 48px */
+  --space-16:  4rem;      /* 64px */
+  
+  /* ── Radii ── */
+  --radius-sm:    8px;
+  --radius-md:    16px;
+  --radius-lg:    24px;
+  --radius-xl:    32px;
+  --radius-2xl:   48px;
+  --radius-full:  9999px;
+
+  /* ── Shadow System (Depth) ── */
+  --shadow-ambient:   0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-float:     0 24px 48px rgba(0, 0, 0, 0.5), 0 12px 24px rgba(0, 0, 0, 0.3);
+  --shadow-glass:     inset 0 1px 1px var(--edge-light), inset 0 0 0 1px var(--edge-light-subtle);
+  
+  /* ── Animation Easings ── */
+  /* Apple Spring Physics */
+  --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  --ease-spring-soft: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+  --ease-fluid:       cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-fast:    200ms;
+  --duration-normal:  400ms;
+  --duration-slow:    800ms;
+}
+
+/* Base Rest & Typography */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--color-bg-base);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: var(--text-hero); letter-spacing: -0.04em; }
+h2 { font-size: var(--text-3xl); letter-spacing: -0.03em; }
+h3 { font-size: var(--text-2xl); }
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea {
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+input:focus, textarea:focus, button:focus {
+  outline: none;
+}
+
+/* ── Global Spatial Background Mesh ── */
+.spatial-background {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(255, 182, 193, 0.6) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(255, 228, 225, 0.8) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.15) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+  animation: ambientMesh 30s ease-in-out infinite alternate;
+}
+
+@keyframes ambientMesh {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-2%, 2%) scale(1.05); }
+  100% { transform: translate(2%, -2%) scale(1); }
+}
+
+/* ── Spatial Glass Component Utility ── */
+.glass-panel {
+  background: var(--surface-glass-2);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass), var(--shadow-ambient);
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-spring),
+              background var(--duration-normal) var(--ease-fluid);
+  will-change: transform, box-shadow;
+}
+
+.glass-panel:hover {
+  background: var(--surface-glass-3);
+  box-shadow: var(--shadow-glass), var(--shadow-float);
+}
+
+/* ── Base Animations ── */
+@keyframes spatialFadeIn {
+  from { opacity: 0; transform: scale(0.98) translateY(10px) translateZ(-20px); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0) translateZ(0); filter: blur(0); }
+}
+
+.animate-spatial-in {
+  animation: spatialFadeIn var(--duration-slow) var(--ease-spring-soft) forwards;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Route & Image Transitions ── */
+.page-transition {
+  animation: pageFadeIn var(--duration-normal) var(--ease-spring-soft) forwards;
+  will-change: opacity, transform, filter;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes pageFadeIn {
+  0% { opacity: 0; filter: blur(10px); transform: scale(0.98); }
+  100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+.image-transition {
+  animation: imageSlideFade 0.4s var(--ease-spring) forwards;
+  will-change: opacity, transform, filter;
+}
+
+@keyframes imageSlideFade {
+  0% { opacity: 0.5; filter: blur(5px); transform: scale(0.95); }
+  100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
