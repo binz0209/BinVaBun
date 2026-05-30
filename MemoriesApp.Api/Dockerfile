@@ -3,12 +3,12 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy project file and restore dependencies
-COPY ["MemoriesApp.Api/MemoriesApp.Api.csproj", "MemoriesApp.Api/"]
-RUN dotnet restore "MemoriesApp.Api/MemoriesApp.Api.csproj"
+COPY ["MemoriesApp.Api.csproj", "./"]
+RUN dotnet restore "MemoriesApp.Api.csproj"
 
 # Copy the rest of the source code
 COPY . .
-WORKDIR "/src/MemoriesApp.Api"
+WORKDIR "/src"
 
 # Build and publish
 RUN dotnet publish "MemoriesApp.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
