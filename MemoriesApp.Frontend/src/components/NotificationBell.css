@@ -197,7 +197,11 @@
 
 @media (max-width: 768px) {
   .notification-dropdown {
-    width: 300px;
-    right: -40px;
+    position: fixed;
+    top: 60px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: 400px;
   }
 }
