@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTheme } from '../contexts/ThemeContext'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { postService } from '../services/postService'
@@ -11,13 +12,14 @@ import FilterModal from '../components/FilterModal'
 import CalendarModal from '../components/CalendarModal'
 import { calendarService } from '../services/calendarService'
 import { BottomNav } from '../components/BottomNav'
-import { UserIcon, FilterIcon, LogoutIcon, MenuIcon, LoadingSpinnerIcon } from '../components/Icons'
+import { UserIcon, FilterIcon, LogoutIcon, MenuIcon, LoadingSpinnerIcon, SunIcon, MoonIcon } from '../components/Icons'
 import { PostSkeleton } from '../components/Skeleton'
 import { ConfirmModal } from '../components/ConfirmModal'
 import { requestNotificationPermission, showNotification } from '../utils/notifications'
 import './Home.css'
 
 function Home() {
+  const { theme, toggleTheme } = useTheme()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [posts, setPosts] = useState([])
@@ -556,7 +558,7 @@ function Home() {
       <header className="home-header">
         <div className="header-content">
           <div className="header-left">
-            <h1 className="app-title" onClick={() => navigate('/')}>
+            <h1 className="app-title" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <span className="app-title-full">Bin & Bún</span>
               <span className="app-title-short">2B</span>
             </h1>
@@ -571,6 +573,10 @@ function Home() {
               onNotificationClick={handleNotificationClick}
               onMarkAllRead={handleMarkAllRead}
             />
+
+            <button className="icon-btn theme-toggle-btn" onClick={toggleTheme} title={theme === 'light' ? 'Chế độ tối' : 'Chế độ sáng'}>
+              {theme === 'light' ? <MoonIcon size={20} /> : <SunIcon size={20} />}
+            </button>
 
             <button className="icon-btn" onClick={() => setShowFilterModal(true)} title="Lọc">
               <FilterIcon size={20} />
@@ -634,7 +640,6 @@ function Home() {
             </div>
             <div className="create-post-text">Chia sẻ khoảnh khắc...</div>
             <div className="create-post-actions">
-              <div className="create-action-btn">📷</div>
               <div className="create-action-btn">💌</div>
             </div>
           </div>

@@ -204,3 +204,73 @@
   }
 }
 
+/* ── Dark Mode ── */
+[data-theme="dark"] .filter-modal-content {
+  background: var(--color-bg-elevated);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .filter-modal-header {
+  border-bottom-color: var(--edge-light);
+}
+
+[data-theme="dark"] .filter-modal-header h2 {
+  color: var(--color-accent);
+}
+
+[data-theme="dark"] .filter-modal-close {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-modal-close:hover {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-checkbox-label {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-content-input,
+[data-theme="dark"] .filter-date-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-light);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-content-input:focus,
+[data-theme="dark"] .filter-date-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .filter-time-type-select {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-light);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-time-type-select:focus {
+  border-color: var(--color-accent);
+}
+
+[data-theme="dark"] .filter-date-separator {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-modal-actions {
+  border-top-color: var(--edge-light);
+}
+
+[data-theme="dark"] .filter-reset-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .filter-reset-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .filter-apply-button {
+  background: var(--color-accent);
+}

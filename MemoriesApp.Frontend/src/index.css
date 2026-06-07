@@ -95,6 +95,54 @@
   --gradient-sunset:      linear-gradient(135deg, #E8647C, #ff8fa3);
 }
 
+/* ══════════════════════════════════════════════
+   DARK MODE — Deep romantic navy
+   ══════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --color-bg-base:      #0f0a1a;
+  --color-bg-elevated:  #1a1228;
+
+  /* Glass — dark translucent */
+  --surface-glass-1:    rgba(30, 20, 50, 0.4);
+  --surface-glass-2:    rgba(30, 20, 50, 0.6);
+  --surface-glass-3:    rgba(40, 28, 65, 0.7);
+  --surface-glass-4:    rgba(40, 28, 65, 0.9);
+
+  /* Borders */
+  --edge-light:         rgba(232, 100, 124, 0.2);
+  --edge-light-subtle:  rgba(232, 100, 124, 0.1);
+  --edge-dark:          rgba(255, 255, 255, 0.06);
+
+  /* Accents — slightly brighter for dark bg */
+  --color-accent:       #ff7b93;
+  --color-accent-soft:  #ff9fb2;
+  --color-accent-glow:  rgba(255, 123, 147, 0.35);
+
+  /* Text — inverted */
+  --text-primary:       rgba(255, 255, 255, 0.92);
+  --text-secondary:     rgba(255, 255, 255, 0.6);
+  --text-tertiary:      rgba(255, 255, 255, 0.35);
+
+  /* Shadows — glow-based for dark */
+  --shadow-ambient:   0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+  --shadow-float:     0 12px 40px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-glass:     inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.15);
+  --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-glow:      0 4px 24px rgba(255, 123, 147, 0.3);
+
+  /* Compat tokens */
+  --color-ink-100:        rgba(255, 255, 255, 0.06);
+  --color-ink-300:        rgba(255, 255, 255, 0.35);
+  --color-ink-500:        rgba(255, 255, 255, 0.5);
+  --color-ink-700:        rgba(255, 255, 255, 0.7);
+  --surface-primary:      var(--color-bg-elevated);
+}
+
+/* Smooth transition when switching themes */
+html {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
 /* ── Reset ── */
 * {
   margin: 0;
@@ -167,6 +215,17 @@ input:focus, textarea:focus, button:focus {
   z-index: -1;
   pointer-events: none;
   animation: ambientMesh 20s ease-in-out infinite alternate;
+  transition: background 0.6s ease;
+}
+
+/* Dark mode mesh — deep purple aurora */
+[data-theme="dark"] .spatial-background {
+  background: 
+    radial-gradient(ellipse at 30% 20%, rgba(255, 123, 147, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(150, 50, 120, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(30, 15, 50, 0.9) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(60, 20, 80, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 80, 140, 0.05) 0%, transparent 50%);
 }
 
 @keyframes ambientMesh {
@@ -174,6 +233,92 @@ input:focus, textarea:focus, button:focus {
   33%  { transform: translate(-3%, 2%) scale(1.03) rotate(0.5deg); }
   66%  { transform: translate(2%, -1%) scale(1.06) rotate(-0.5deg); }
   100% { transform: translate(-1%, -2%) scale(1.02) rotate(0deg); }
+}
+
+/* ══════════════════════════════════════════════
+   STARFIELD — Twinkling stars background
+   ══════════════════════════════════════════════ */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+/* Only show in dark mode */
+[data-theme="dark"] .starfield {
+  opacity: 1;
+}
+
+/* Layer 1: small stars */
+.starfield::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  box-shadow:
+    12vw 8vh 2px 1px rgba(255,255,255,0.9),
+    25vw 15vh 1px 0.5px rgba(255,200,220,0.8),
+    45vw 5vh 2px 1px rgba(255,255,255,0.7),
+    67vw 22vh 1px 0.5px rgba(255,255,255,0.9),
+    82vw 12vh 2px 1px rgba(255,200,220,0.6),
+    93vw 35vh 1px 0.5px rgba(255,255,255,0.8),
+    8vw 42vh 2px 1px rgba(255,255,255,0.7),
+    33vw 55vh 1px 0.5px rgba(255,200,220,0.9),
+    55vw 48vh 2px 1px rgba(255,255,255,0.6),
+    72vw 62vh 1px 0.5px rgba(255,255,255,0.8),
+    18vw 72vh 2px 1px rgba(255,200,220,0.7),
+    40vw 82vh 1px 0.5px rgba(255,255,255,0.9),
+    60vw 90vh 2px 1px rgba(255,255,255,0.6),
+    88vw 75vh 1px 0.5px rgba(255,200,220,0.8),
+    5vw 95vh 2px 1px rgba(255,255,255,0.7),
+    76vw 88vh 1px 0.5px rgba(255,255,255,0.9),
+    30vw 30vh 2px 1px rgba(255,200,220,0.6),
+    50vw 70vh 1px 0.5px rgba(255,255,255,0.8),
+    15vw 58vh 2px 1px rgba(255,200,220,0.7),
+    95vw 50vh 1px 0.5px rgba(255,255,255,0.9);
+  animation: twinkle1 4s ease-in-out infinite alternate;
+}
+
+/* Layer 2: medium stars, offset timing */
+.starfield::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  box-shadow:
+    7vw 18vh 2px 1px rgba(255,200,220,0.8),
+    22vw 38vh 1.5px 0.5px rgba(255,255,255,0.7),
+    38vw 12vh 2px 1px rgba(255,255,255,0.9),
+    52vw 28vh 1.5px 0.5px rgba(255,200,220,0.6),
+    78vw 45vh 2px 1px rgba(255,255,255,0.8),
+    90vw 18vh 1.5px 0.5px rgba(255,200,220,0.7),
+    3vw 65vh 2px 1px rgba(255,255,255,0.9),
+    48vw 78vh 1.5px 0.5px rgba(255,255,255,0.6),
+    65vw 52vh 2px 1px rgba(255,200,220,0.8),
+    85vw 92vh 1.5px 0.5px rgba(255,255,255,0.7),
+    28vw 88vh 2px 1px rgba(255,255,255,0.9),
+    58vw 15vh 1.5px 0.5px rgba(255,200,220,0.6),
+    42vw 42vh 2px 1px rgba(255,255,255,0.8),
+    70vw 35vh 1.5px 0.5px rgba(255,200,220,0.7),
+    15vw 25vh 2px 1px rgba(255,255,255,0.6);
+  animation: twinkle2 5s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle1 {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes twinkle2 {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 0.9; }
 }
 
 /* ══════════════════════════════════════════════
@@ -379,3 +524,122 @@ input:focus, textarea:focus, button:focus {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* ══════════════════════════════════════════════
+   DARK MODE — Component-level overrides
+   (for hardcoded rgba values in component CSS)
+   ══════════════════════════════════════════════ */
+
+/* Modal overlays */
+[data-theme="dark"] .create-post-modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Inputs & textareas */
+[data-theme="dark"] .create-post-textarea,
+[data-theme="dark"] .password-input,
+[data-theme="dark"] .display-name-input,
+[data-theme="dark"] .login-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-light);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .create-post-textarea:focus,
+[data-theme="dark"] .password-input:focus,
+[data-theme="dark"] .display-name-input:focus,
+[data-theme="dark"] .login-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 123, 147, 0.4);
+}
+
+/* Buttons with hardcoded white bg */
+[data-theme="dark"] .create-post-submit-button {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .create-post-submit-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .create-post-modal-close,
+[data-theme="dark"] .create-post-image-upload-button,
+[data-theme="dark"] .avatar-upload-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-light);
+}
+
+[data-theme="dark"] .create-post-modal-close:hover:not(:disabled),
+[data-theme="dark"] .create-post-image-upload-button:hover,
+[data-theme="dark"] .avatar-upload-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Edit/Save buttons in Profile */
+[data-theme="dark"] .edit-button {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-light);
+}
+
+[data-theme="dark"] .edit-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .save-button {
+  background: var(--color-accent);
+  color: white;
+}
+
+[data-theme="dark"] .save-password-button {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+  border-color: var(--edge-light);
+}
+
+[data-theme="dark"] .save-password-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Create post prompt */
+[data-theme="dark"] .create-action-btn {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .create-post-prompt:hover .create-action-btn {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* SVG icon colors — override fill="#000" */
+[data-theme="dark"] svg path[fill="#000"] {
+  fill: var(--text-primary);
+}
+
+/* Change password section */
+[data-theme="dark"] .change-password-button {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--edge-light-subtle);
+}
+
+[data-theme="dark"] .change-password-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Post image single bg */
+[data-theme="dark"] .post-images-single {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── Theme Toggle Button Animation ── */
+.theme-toggle-btn {
+  position: relative;
+}
+
+.theme-toggle-btn svg {
+  transition: transform 0.4s var(--ease-spring), opacity 0.3s;
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(30deg);
+}
+

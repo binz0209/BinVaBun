@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 import { GlassPanel } from '../components/GlassPanel'
+import { SunIcon, MoonIcon } from '../components/Icons'
 import './Login.css'
 
 function Login() {
+  const { theme, toggleTheme } = useTheme()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -47,6 +50,9 @@ function Login() {
 
   return (
     <div className="login-container">
+      <button className="login-theme-toggle theme-toggle-btn" onClick={toggleTheme} title={theme === 'light' ? 'Chế độ tối' : 'Chế độ sáng'}>
+        {theme === 'light' ? <MoonIcon size={20} /> : <SunIcon size={20} />}
+      </button>
       <GlassPanel enable3D={true} className="login-card">
         <div className="login-header">
           <h1 className="login-title">

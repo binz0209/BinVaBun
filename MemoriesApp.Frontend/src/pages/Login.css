@@ -4,7 +4,33 @@
   align-items: center;
   min-height: 100vh;
   padding: var(--space-5);
+  position: relative;
   /* Background handled by global spatial-background */
+}
+
+.login-theme-toggle {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-glass-1);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--edge-light-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-spring);
+  z-index: 10;
+}
+
+.login-theme-toggle:hover {
+  background: var(--surface-glass-2);
+  color: var(--text-primary);
+  transform: scale(1.1);
 }
 
 .login-card {
