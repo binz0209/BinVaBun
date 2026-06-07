@@ -28,6 +28,24 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+// Auto-logout khi token hết hạn (401 Unauthorized)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Token hết hạn hoặc không hợp lệ
+      const currentPath = window.location.pathname
+      // Chỉ xử lý nếu không phải đang ở trang login (tránh loop)
+      if (currentPath !== '/login') {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        window.location.href = '/login'
+      }
+    }
+    return Promise.reject(error)
+  }
+)
+
 export const authService = {
   login: async (username, password) => {
     const response = await api.post('/auth/login', { username, password })

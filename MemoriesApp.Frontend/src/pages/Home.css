@@ -37,10 +37,14 @@
 }
 
 .app-title {
-  color: var(--text-primary);
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
+  font-style: italic;
+  background: linear-gradient(135deg, #E8647C 0%, #c44569 50%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   transition: all var(--duration-fast) var(--ease-out);
   user-select: none;
   cursor: pointer;
@@ -49,7 +53,8 @@
 }
 
 .app-title:hover {
-  opacity: 0.8;
+  filter: brightness(1.15);
+  transform: scale(1.03);
 }
 
 .app-title-short {
@@ -92,13 +97,43 @@
   pointer-events: none;
 }
 
+/* Animated gradient border glow */
+.anniversary-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, 
+    var(--color-accent) 0%, 
+    rgba(255, 182, 193, 0.6) 33%,
+    rgba(255, 228, 225, 0.4) 66%,
+    var(--color-accent) 100%);
+  background-size: 200% 200%;
+  animation: gradientBorderShift 4s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes gradientBorderShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .anniversary-title {
-  color: var(--text-primary);
   font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: var(--weight-bold);
+  font-style: italic;
   margin-bottom: var(--space-2);
   letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #E8647C 0%, #c44569 40%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .anniversary-subtitle {
@@ -147,15 +182,20 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(232,100,124,0.15), rgba(255,143,163,0.1));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
+  color: var(--color-accent);
   font-weight: var(--weight-bold);
   flex-shrink: 0;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px var(--edge-light);
+  box-shadow: 0 0 0 2px rgba(232, 100, 124, 0.2);
+  transition: box-shadow var(--duration-fast);
+}
+
+.create-post-prompt:hover .create-post-avatar {
+  box-shadow: 0 0 0 2px rgba(232, 100, 124, 0.4), 0 0 12px rgba(232, 100, 124, 0.15);
 }
 
 .create-post-avatar img {
@@ -197,7 +237,7 @@
 .icon-btn {
   background: transparent;
   border: none;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
@@ -205,13 +245,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--duration-fast);
-  opacity: 0.8;
+  transition: all var(--duration-fast) var(--ease-spring);
 }
 
 .icon-btn:hover {
-  background: var(--surface-glass-2);
-  opacity: 1;
+  background: rgba(232, 100, 124, 0.08);
+  color: var(--color-accent);
+  transform: translateY(-1px);
 }
 
 .desktop-menu {

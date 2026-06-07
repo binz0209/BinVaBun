@@ -4,13 +4,13 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--surface-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid var(--surface-glass-border);
+  background: var(--surface-glass-2);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-top: 1px solid var(--edge-light-subtle);
   z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 24px rgba(26, 18, 22, 0.08);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.08);
 }
 
 .bottom-nav-content {
@@ -28,24 +28,29 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-1);
-  color: var(--color-ink-300);
+  color: var(--text-tertiary);
   background: transparent;
   border: none;
   font-family: var(--font-body);
   font-size: 10px;
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all var(--duration-fast);
+  transition: all var(--duration-fast) var(--ease-spring);
   padding: var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.nav-item:hover {
+  background: var(--surface-glass-1);
 }
 
 .nav-item.active {
-  color: var(--color-rose-600);
+  color: var(--color-accent);
 }
 
 .nav-item svg {
   fill: currentColor;
-  transition: transform var(--duration-fast);
+  transition: transform var(--duration-fast) var(--ease-spring);
 }
 
 .nav-item.active svg {
@@ -57,7 +62,7 @@
 }
 
 .create-icon-wrapper {
-  background: var(--gradient-sunset);
+  background: linear-gradient(135deg, #E8647C, #ff8fa3);
   width: 56px;
   height: 56px;
   border-radius: var(--radius-full);
@@ -65,9 +70,15 @@
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: var(--shadow-glow);
-  border: 4px solid var(--surface-primary);
-  transition: transform var(--duration-fast);
+  box-shadow: 0 4px 24px rgba(232, 100, 124, 0.4);
+  border: 4px solid var(--color-bg-elevated);
+  transition: transform var(--duration-fast) var(--ease-spring),
+              box-shadow var(--duration-fast);
+}
+
+.create-btn:hover .create-icon-wrapper {
+  transform: scale(1.05);
+  box-shadow: 0 6px 28px rgba(232, 100, 124, 0.5);
 }
 
 .create-btn:active .create-icon-wrapper {

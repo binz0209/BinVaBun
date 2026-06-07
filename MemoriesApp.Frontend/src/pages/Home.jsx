@@ -616,13 +616,13 @@ function Home() {
 
           {/* Anniversary Banner */}
           {!hasActiveFilter && (
-            <div 
+            <div
               className="anniversary-banner"
               onClick={() => setShowCalendarModal(true)}
             >
               <div className="anniversary-title">📅 Bên nhau {diffDays} ngày</div>
               <div className="anniversary-subtitle">
-                💕 Đã đi chơi cùng nhau: {totalMarkedDates} ngày
+                💕 Đã đi iu cùng nhau: {totalMarkedDates} ngày
               </div>
             </div>
           )}

@@ -4,7 +4,7 @@
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
-  animation: spatialFadeIn 1.5s var(--ease-spring-soft);
+  /* Animation is now handled by .animate-on-scroll wrapper */
   /* The GlassPanel component handles the background, blur, and 3D shadow/tilt. */
 }
 
@@ -195,6 +195,9 @@
 }
 
 /* Original grids */
+.post-images-single { display: flex; justify-content: center; width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: inset 0 0 0 1px var(--edge-light-subtle); background: rgba(0,0,0,0.02); }
+.post-images-single .post-image-wrapper { width: 100%; max-height: 600px; display: flex; justify-content: center; }
+.post-images-single .post-image-square { object-fit: contain; width: 100%; height: auto; max-height: 600px; }
 .post-images-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
 .post-images-two-portrait { display: grid; grid-template-columns: 1fr 1fr; max-width: 100%; width: 100%; }
 .post-images-two-portrait .post-image-wrapper { aspect-ratio: 3 / 4; }
@@ -226,6 +229,23 @@
 .post-image-wrapper {
   position: relative;
   overflow: hidden;
+}
+
+/* Subtle accent glow on image hover */
+.post-image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  box-shadow: inset 0 0 40px rgba(232, 100, 124, 0.12);
+  transition: opacity var(--duration-normal) var(--ease-fluid);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.post-image-wrapper:hover::after {
+  opacity: 1;
 }
 
 .post-images-grid .post-image-wrapper {

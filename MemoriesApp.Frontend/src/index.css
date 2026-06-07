@@ -1,61 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  /* ── Core Liquid Glass Palette (Spatial Dark Theme by default for immersive feel, or Light) ── */
-  /* We'll use a sophisticated dark/light adaptive approach. Defaulting to a deep, spatial dark mode for max luxury */
-  --color-bg-base:      #FDF2F4; /* Premium Soft Pink */
+  /* ── Core Palette ── */
+  --color-bg-base:      #FDF2F4;
   --color-bg-elevated:  #FFFFFF;
   
-  /* Glass Layers (Dynamic Translucency) */
+  /* Glass Layers */
   --surface-glass-1:    rgba(255, 255, 255, 0.3);
   --surface-glass-2:    rgba(255, 255, 255, 0.5);
   --surface-glass-3:    rgba(255, 255, 255, 0.7);
   --surface-glass-4:    rgba(255, 255, 255, 0.9);
   
-  /* Borders / Edge Lighting */
-  --edge-light:         rgba(255, 255, 255, 0.8);
-  --edge-light-subtle:  rgba(255, 255, 255, 0.4);
-  --edge-dark:          rgba(0, 0, 0, 0.1);
+  /* Borders / Edge Lighting — tuned for LIGHT background */
+  --edge-light:         rgba(232, 100, 124, 0.15);
+  --edge-light-subtle:  rgba(232, 100, 124, 0.08);
+  --edge-dark:          rgba(0, 0, 0, 0.06);
 
   /* Accents */
-  --color-accent:       #E8647C; /* Keeping the core romantic accent, but muted for elegance */
+  --color-accent:       #E8647C;
+  --color-accent-soft:  #ff8fa3;
   --color-accent-glow:  rgba(232, 100, 124, 0.3);
   
   /* Text */
-  --text-primary:       rgba(0, 0, 0, 0.9);
-  --text-secondary:     rgba(0, 0, 0, 0.6);
-  --text-tertiary:      rgba(0, 0, 0, 0.4);
+  --text-primary:       rgba(0, 0, 0, 0.88);
+  --text-secondary:     rgba(0, 0, 0, 0.55);
+  --text-tertiary:      rgba(0, 0, 0, 0.35);
 
-  /* ── Typography System (Apple SF Pro Style) ── */
-  --font-display:  -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
-  --font-body:     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+  /* ── Typography ── */
+  --font-display:  'Playfair Display', -apple-system, BlinkMacSystemFont, "Inter", serif;
+  --font-body:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   
-  /* Fluid font sizes mimicking iOS guidelines */
-  --text-xs:    clamp(0.75rem, 0.5vi + 0.6rem, 0.8125rem); /* 13px */
-  --text-sm:    clamp(0.875rem, 0.6vi + 0.7rem, 0.9375rem); /* 15px */
-  --text-base:  clamp(1rem, 0.8vi + 0.8rem, 1.0625rem);    /* 17px */
-  --text-lg:    clamp(1.125rem, 1vi + 0.8rem, 1.25rem);    /* 20px */
-  --text-xl:    clamp(1.375rem, 1.2vi + 0.9rem, 1.5rem);   /* 24px */
-  --text-2xl:   clamp(1.75rem, 1.5vi + 1rem, 2rem);        /* 32px */
-  --text-3xl:   clamp(2.5rem, 2vi + 1rem, 3rem);           /* 48px */
-  --text-hero:  clamp(3.5rem, 4vi + 1.5rem, 4.5rem);       /* 72px */
+  /* Fluid font sizes */
+  --text-xs:    clamp(0.75rem, 0.5vi + 0.6rem, 0.8125rem);
+  --text-sm:    clamp(0.875rem, 0.6vi + 0.7rem, 0.9375rem);
+  --text-base:  clamp(1rem, 0.8vi + 0.8rem, 1.0625rem);
+  --text-lg:    clamp(1.125rem, 1vi + 0.8rem, 1.25rem);
+  --text-xl:    clamp(1.375rem, 1.2vi + 0.9rem, 1.5rem);
+  --text-2xl:   clamp(1.75rem, 1.5vi + 1rem, 2rem);
+  --text-3xl:   clamp(2.5rem, 2vi + 1rem, 3rem);
+  --text-hero:  clamp(3.5rem, 4vi + 1.5rem, 4.5rem);
   
   --weight-regular:   400;
   --weight-medium:    500;
   --weight-semibold:  600;
   --weight-bold:      700;
   
-  /* ── Spacing (8px Grid) ── */
-  --space-1:   0.25rem;   /* 4px */
-  --space-2:   0.5rem;    /* 8px */
-  --space-3:   0.75rem;   /* 12px */
-  --space-4:   1rem;      /* 16px */
-  --space-5:   1.25rem;   /* 20px */
-  --space-6:   1.5rem;    /* 24px */
-  --space-8:   2rem;      /* 32px */
-  --space-10:  2.5rem;    /* 40px */
-  --space-12:  3rem;      /* 48px */
-  --space-16:  4rem;      /* 64px */
+  /* ── Spacing ── */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-5:   1.25rem;
+  --space-6:   1.5rem;
+  --space-8:   2rem;
+  --space-10:  2.5rem;
+  --space-12:  3rem;
+  --space-16:  4rem;
   
   /* ── Radii ── */
   --radius-sm:    8px;
@@ -65,22 +65,37 @@
   --radius-2xl:   48px;
   --radius-full:  9999px;
 
-  /* ── Shadow System (Depth) ── */
-  --shadow-ambient:   0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-float:     0 24px 48px rgba(0, 0, 0, 0.5), 0 12px 24px rgba(0, 0, 0, 0.3);
-  --shadow-glass:     inset 0 1px 1px var(--edge-light), inset 0 0 0 1px var(--edge-light-subtle);
+  /* ── Shadows — LIGHT THEME tuned (soft, not heavy) ── */
+  --shadow-ambient:   0 4px 20px rgba(232, 100, 124, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  --shadow-float:     0 12px 40px rgba(232, 100, 124, 0.15), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-glass:     inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 1px 3px rgba(232, 100, 124, 0.06);
+  --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-glow:      0 4px 24px rgba(232, 100, 124, 0.35);
   
-  /* ── Animation Easings ── */
-  /* Apple Spring Physics */
+  /* ── Easings ── */
   --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.15);
   --ease-spring-soft: cubic-bezier(0.175, 0.885, 0.32, 1.05);
   --ease-fluid:       cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:         cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce:      cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --duration-fast:    200ms;
   --duration-normal:  400ms;
   --duration-slow:    800ms;
+
+  /* ── Compatibility Tokens ── */
+  --color-ink-100:        rgba(0, 0, 0, 0.06);
+  --color-ink-300:        rgba(0, 0, 0, 0.35);
+  --color-ink-500:        rgba(0, 0, 0, 0.5);
+  --color-ink-700:        rgba(0, 0, 0, 0.7);
+  --color-rose-600:       var(--color-accent);
+  --surface-primary:      var(--color-bg-elevated);
+  --surface-glass:        var(--surface-glass-2);
+  --surface-glass-border: var(--edge-light-subtle);
+  --gradient-sunset:      linear-gradient(135deg, #E8647C, #ff8fa3);
 }
 
-/* Base Rest & Typography */
+/* ── Reset ── */
 * {
   margin: 0;
   padding: 0;
@@ -101,7 +116,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: var(--weight-semibold);
+  font-weight: var(--weight-bold);
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -135,49 +150,151 @@ input:focus, textarea:focus, button:focus {
   outline: none;
 }
 
-/* ── Global Spatial Background Mesh ── */
+/* ══════════════════════════════════════════════
+   ANIMATED BACKGROUND MESH — Multi-layer
+   ══════════════════════════════════════════════ */
 .spatial-background {
   position: fixed;
   inset: -50%;
   width: 200%;
   height: 200%;
   background: 
-    radial-gradient(circle at 50% 50%, rgba(255, 182, 193, 0.6) 0%, transparent 60%),
-    radial-gradient(circle at 80% 20%, rgba(255, 228, 225, 0.8) 0%, transparent 50%),
-    radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.15) 0%, transparent 50%);
+    radial-gradient(ellipse at 30% 20%, rgba(232, 100, 124, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(255, 143, 163, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 228, 225, 0.8) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(253, 242, 244, 0.9) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.08) 0%, transparent 50%);
   z-index: -1;
   pointer-events: none;
-  animation: ambientMesh 30s ease-in-out infinite alternate;
+  animation: ambientMesh 20s ease-in-out infinite alternate;
 }
 
 @keyframes ambientMesh {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-2%, 2%) scale(1.05); }
-  100% { transform: translate(2%, -2%) scale(1); }
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  33%  { transform: translate(-3%, 2%) scale(1.03) rotate(0.5deg); }
+  66%  { transform: translate(2%, -1%) scale(1.06) rotate(-0.5deg); }
+  100% { transform: translate(-1%, -2%) scale(1.02) rotate(0deg); }
 }
 
-/* ── Spatial Glass Component Utility ── */
+/* ══════════════════════════════════════════════
+   GLASS PANEL — Liquid Glass with VISIBLE border
+   ══════════════════════════════════════════════ */
 .glass-panel {
   background: var(--surface-glass-2);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: var(--radius-lg);
+  border: 1px solid rgba(232, 100, 124, 0.12);
   box-shadow: var(--shadow-glass), var(--shadow-ambient);
   transition: transform var(--duration-normal) var(--ease-spring),
               box-shadow var(--duration-normal) var(--ease-spring),
+              border-color var(--duration-normal),
               background var(--duration-normal) var(--ease-fluid);
   will-change: transform, box-shadow;
+  position: relative;
+  /* NO overflow:hidden — it clips dropdown menus! */
+}
+
+/* Liquid Glass gradient border — pink accent, VISIBLE on light bg */
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg,
+    rgba(232, 100, 124, 0.35) 0%,
+    rgba(255, 143, 163, 0.2) 25%,
+    transparent 50%,
+    rgba(255, 143, 163, 0.2) 75%,
+    rgba(232, 100, 124, 0.35) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+  transition: opacity var(--duration-normal);
 }
 
 .glass-panel:hover {
   background: var(--surface-glass-3);
+  border-color: rgba(232, 100, 124, 0.2);
   box-shadow: var(--shadow-glass), var(--shadow-float);
 }
 
-/* ── Base Animations ── */
+.glass-panel:hover::before {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════
+   GRADIENT TEXT — like 3D Creator portfolio
+   ══════════════════════════════════════════════ */
+.gradient-text {
+  background: linear-gradient(135deg, #E8647C 0%, #c44569 40%, #ff6b6b 70%, #E8647C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(180deg, #c44569 0%, #E8647C 50%, #ff8fa3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ══════════════════════════════════════════════
+   GRADIENT BUTTON — inspired by ContactButton
+   ══════════════════════════════════════════════ */
+.btn-gradient {
+  background: linear-gradient(135deg, #E8647C 0%, #c44569 50%, #ff6b6b 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-3) var(--space-6);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(232, 100, 124, 0.4),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transition: all var(--duration-normal) var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(232, 100, 124, 0.5),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.btn-gradient:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Shimmer sweep on gradient button */
+.btn-gradient::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transition: left 0.5s;
+}
+
+.btn-gradient:hover::after {
+  left: 100%;
+}
+
+/* ══════════════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════════════ */
 @keyframes spatialFadeIn {
-  from { opacity: 0; transform: scale(0.98) translateY(10px) translateZ(-20px); filter: blur(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0) translateZ(0); filter: blur(0); }
+  from { opacity: 0; transform: scale(0.96) translateY(16px); filter: blur(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
 }
 
 .animate-spatial-in {
@@ -193,7 +310,17 @@ input:focus, textarea:focus, button:focus {
   to { transform: rotate(360deg); }
 }
 
-/* ── Route & Image Transitions ── */
+/* Floating / breathing animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ── Route & Page Transitions ── */
 .page-transition {
   animation: pageFadeIn var(--duration-normal) var(--ease-spring-soft) forwards;
   will-change: opacity, transform, filter;
@@ -204,7 +331,7 @@ input:focus, textarea:focus, button:focus {
 }
 
 @keyframes pageFadeIn {
-  0% { opacity: 0; filter: blur(10px); transform: scale(0.98); }
+  0% { opacity: 0; filter: blur(8px); transform: scale(0.98); }
   100% { opacity: 1; filter: blur(0); transform: scale(1); }
 }
 
@@ -216,4 +343,39 @@ input:focus, textarea:focus, button:focus {
 @keyframes imageSlideFade {
   0% { opacity: 0.5; filter: blur(5px); transform: scale(0.95); }
   100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+/* ── Shimmer Loading ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Scroll-Triggered Stagger ── */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  filter: blur(6px);
+  transition: opacity 0.6s var(--ease-spring-soft),
+              transform 0.6s var(--ease-spring-soft),
+              filter 0.6s var(--ease-spring-soft);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* ── Modal Drop ── */
+@keyframes dynamicIslandDrop {
+  0% { opacity: 0; transform: scale(0.85) translateY(-20px); filter: blur(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+/* ── Gradient border shift (for banners) ── */
+@keyframes gradientBorderShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

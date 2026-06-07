@@ -24,14 +24,35 @@ function PostCard({ post, currentUserId, onLike, onComment, onUpdate, onDelete }
   const [showEditModal, setShowEditModal] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
   const menuRef = useRef(null)
   const menuButtonRef = useRef(null)
+  const cardRef = useRef(null)
   
   const maxLength = 200 // Độ dài tối đa trước khi truncate
   const shouldTruncate = post.content && post.content.length > maxLength
   const displayContent = isExpanded || !shouldTruncate 
     ? post.content 
     : post.content.substring(0, maxLength) + '...'
+
+  // Scroll-triggered reveal animation
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.unobserve(el)
+        }
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+    )
+
+    observer.observe(el)
+    return () => observer.unobserve(el)
+  }, [])
 
   // ESC key và click outside handler cho menu
   useEffect(() => {
@@ -78,6 +99,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onUpdate, onDelete }
   }
 
   return (
+    <div ref={cardRef} className={`animate-on-scroll ${isVisible ? 'visible' : ''}`}>
     <GlassPanel enable3D={true} className="post-card">
       <div className="post-header">
         <div className="post-author">
@@ -217,6 +239,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onUpdate, onDelete }
         />
       )}
     </GlassPanel>
+    </div>
   )
 }
 
@@ -259,7 +282,9 @@ function PostImages({ images, postId, navigate }) {
   // Determine layout class
   let layoutClass = 'post-images-grid'
   
-  if (imageCount === 2) {
+  if (imageCount === 1) {
+    layoutClass = 'post-images-single'
+  } else if (imageCount === 2) {
     const [first, second] = imageOrientations
     if (first === 'portrait' && second === 'portrait') {
       layoutClass = 'post-images-two-portrait'
