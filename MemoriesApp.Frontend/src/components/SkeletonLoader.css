@@ -1,0 +1,120 @@
+/* ──────────────────────────────────────────────
+   SkeletonLoader.css
+   Dùng CSS variables từ index.css để tự động
+   adapt light/dark theme
+   ────────────────────────────────────────────── */
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+/* Base shimmer block */
+.skeleton-block {
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-ink-100)  25%,
+    var(--surface-glass-3) 50%,
+    var(--color-ink-100)  75%
+  );
+  background-size: 1200px 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+/* ── Full page wrapper ── */
+.skeleton-page {
+  min-height: 100vh;
+  background: var(--color-bg-base);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Navbar ── */
+.skeleton-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-8);
+  border-bottom: 1px solid var(--edge-light-subtle);
+  background: var(--surface-glass-4);
+  backdrop-filter: blur(12px);
+  height: 64px;
+}
+
+.skeleton-logo    { width: 120px; height: 28px; }
+.skeleton-nav-actions { display: flex; align-items: center; gap: var(--space-3); }
+.skeleton-avatar-sm   { width: 34px; height: 34px; border-radius: var(--radius-full) !important; }
+.skeleton-btn         { width: 80px; height: 34px; border-radius: var(--radius-full) !important; }
+
+/* ── Body layout ── */
+.skeleton-body {
+  display: flex;
+  flex: 1;
+  gap: var(--space-6);
+  padding: var(--space-8);
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Sidebar ── */
+.skeleton-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.skeleton-sidebar-item       { height: 36px; width: 100%; }
+.skeleton-sidebar-item.short { width: 65%; }
+
+/* ── Feed ── */
+.skeleton-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  flex: 1;
+}
+
+.skeleton-card {
+  background: var(--surface-glass-1);
+  border: 1px solid var(--edge-light-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-ambient);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skeleton-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.skeleton-avatar { width: 42px; height: 42px; border-radius: var(--radius-full) !important; flex-shrink: 0; }
+
+.skeleton-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.skeleton-title    { height: 14px; width: 140px; }
+.skeleton-subtitle { height: 11px; width: 90px; }
+
+.skeleton-image { height: 220px; width: 100%; border-radius: var(--radius-md) !important; }
+
+.skeleton-card-lines { display: flex; flex-direction: column; gap: var(--space-2); }
+.skeleton-line       { height: 12px; width: 90%; }
+.skeleton-line.short { width: 55%; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .skeleton-sidebar { display: none; }
+  .skeleton-body    { padding: var(--space-4); }
+}
