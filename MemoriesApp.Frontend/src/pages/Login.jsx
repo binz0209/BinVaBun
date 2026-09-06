@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { authService } from '../services/authService'
 import { GlassPanel } from '../components/GlassPanel'
 import { SunIcon, MoonIcon } from '../components/Icons'
 import './Login.css'
@@ -12,8 +13,21 @@ function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [backendReady, setBackendReady] = useState(false)
   const { login, user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
+  const pingStarted = useRef(false)
+
+  // ── Warm up backend ngay khi mở trang Login ──
+  // Backend Render free tier sleep sau 15 phút, ping trước để đánh thức
+  useEffect(() => {
+    if (pingStarted.current) return
+    pingStarted.current = true
+
+    authService.pingBackend().then(ok => {
+      setBackendReady(true)
+    })
+  }, [])
 
   // Redirect về home nếu đã đăng nhập
   useEffect(() => {
@@ -91,6 +105,20 @@ function Login() {
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? 'Đang mở cửa...' : 'Đăng nhập 💕'}
           </button>
+
+          {/* Backend connection indicator */}
+          {!backendReady && (
+            <div className="backend-status connecting">
+              <span className="status-dot"></span>
+              Đang kết nối server...
+            </div>
+          )}
+          {backendReady && (
+            <div className="backend-status connected">
+              <span className="status-dot"></span>
+              Server sẵn sàng
+            </div>
+          )}
         </form>
       </GlassPanel>
     </div>
@@ -98,3 +126,4 @@ function Login() {
 }
 
 export default Login
+

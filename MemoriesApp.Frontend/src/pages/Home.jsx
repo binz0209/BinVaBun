@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { postService } from '../services/postService'
 import { notificationService } from '../services/notificationService'
 import signalRService from '../services/signalRService'
+import { cacheService } from '../services/cacheService'
 import PostList from '../components/PostList'
 import NotificationBell from '../components/NotificationBell'
 import CreatePostModal from '../components/CreatePostModal'
@@ -104,17 +105,32 @@ function Home() {
   }, [showMenuDropdown])
 
   useEffect(() => {
-    loadData(1, false)
-    loadMarkedDatesTotal()
-
-    // Yêu cầu quyền thông báo khi component mount
-    requestNotificationPermission().then(granted => {
-      if (granted) {
-        console.log('Đã được cấp quyền thông báo')
-      } else {
-        console.log('Không được cấp quyền thông báo')
+    // ── Stale-while-revalidate: hiển thị cached data ngay lập tức ──
+    const cachedPosts = cacheService.get('home_posts', true)
+    const cachedNotifications = cacheService.get('home_notifications', true)
+    if (cachedPosts && cachedPosts.length > 0) {
+      const currentUserId = user?.id || user?.Id
+      const postsWithOwner = cachedPosts.map(post => ({
+        ...post,
+        isOwner: String(post.authorId) === String(currentUserId)
+      }))
+      setPosts(postsWithOwner)
+      setAllPosts(postsWithOwner)
+      if (cachedNotifications) {
+        setNotifications(cachedNotifications)
       }
-    })
+      setLoading(false) // Hiển UI ngay với cached data
+    }
+
+    // Fetch dữ liệu mới ở background (luôn luôn fetch, bất kể có cache hay không)
+    loadData(1, false)
+
+    // Defer calendar data — không cần load ngay lập tức
+    const calendarTimer = setTimeout(() => {
+      loadMarkedDatesTotal()
+      // Yêu cầu quyền thông báo (deferred, không block UI)
+      requestNotificationPermission()
+    }, 1500)
 
     // Tạo audio element một lần và reuse
     if (!audioRef.current) {
@@ -340,6 +356,7 @@ function Home() {
     signalRService.on('DatesBatchUpdated', handleDatesBatchUpdated)
 
     return () => {
+      clearTimeout(calendarTimer)
       signalRService.off('NewPost', handleNewPost)
       signalRService.off('PostUpdated', handlePostUpdated)
       signalRService.off('PostDeleted', handlePostDeleted)
@@ -433,6 +450,8 @@ function Home() {
       } else {
         setAllPosts(postsWithOwner)
         setPosts(postsWithOwner)
+        // Cache posts và notifications cho stale-while-revalidate
+        cacheService.set('home_posts', postsWithOwner)
       }
 
       setCurrentPage(page)
@@ -440,6 +459,7 @@ function Home() {
 
       if (page === 1) {
         setNotifications(notificationsData)
+        cacheService.set('home_notifications', notificationsData)
       }
     } catch (error) {
       console.error('Error loading data:', error)

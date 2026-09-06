@@ -106,16 +106,19 @@ public class PostsController : ControllerBase
         var skip = (page - 1) * pageSize;
         var limit = pageSize;
         
-        // Lấy tổng số bài viết sau khi filter
-        var totalCount = await _mongoDb.Posts.CountDocumentsAsync(filter);
-        
-        // Lấy bài viết với pagination
-        var posts = await _mongoDb.Posts
+        // ── Song song hóa 2 queries để giảm latency ──
+        var countTask = _mongoDb.Posts.CountDocumentsAsync(filter);
+        var postsTask = _mongoDb.Posts
             .Find(filter)
             .SortByDescending(p => p.CreatedAt)
             .Skip(skip)
             .Limit(limit)
             .ToListAsync();
+
+        await Task.WhenAll(countTask, postsTask);
+        
+        var totalCount = countTask.Result;
+        var posts = postsTask.Result;
 
         var allAuthorIds = posts.SelectMany(p => p.Comments)
             .Where(c => string.IsNullOrEmpty(c.AuthorName) || c.AuthorName == c.AuthorId)

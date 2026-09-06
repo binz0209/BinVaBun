@@ -25,11 +25,11 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`
   }
 
-  // Gắn timer 4 giây: nếu request chưa xong → phát event "backend-slow"
+  // Gắn timer 3 giây: nếu request chưa xong → phát event "backend-slow"
   // để App.jsx hiện toast "Server đang khởi động..."
   const slowTimer = setTimeout(() => {
     window.dispatchEvent(new CustomEvent('backend-slow'))
-  }, 4000)
+  }, 3000)
 
   // Lưu timer vào config để response interceptor có thể huỷ
   config._slowTimer = slowTimer
@@ -79,6 +79,19 @@ export const authService = {
   validateToken: async () => {
     const response = await api.get('/auth/me')
     return response.data
+  },
+
+  /**
+   * pingBackend — gọi endpoint nhẹ không cần auth để warm up backend.
+   * Dùng khi mở trang Login để đánh thức Render free tier.
+   */
+  pingBackend: async () => {
+    try {
+      await api.get('/auth/ping')
+      return true
+    } catch {
+      return false
+    }
   }
 }
 

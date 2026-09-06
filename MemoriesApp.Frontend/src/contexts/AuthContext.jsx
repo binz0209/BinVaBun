@@ -28,6 +28,8 @@ export function AuthProvider({ children }) {
     // Không block UI — chỉ logout âm thầm nếu token thực sự expired
     const validateInBackground = async () => {
       try {
+        // Ping trước để đảm bảo backend đã thức (Render free tier)
+        await authService.pingBackend()
         await authService.validateToken()
         // Token hợp lệ → không làm gì cả, user đã vào app rồi
       } catch (err) {

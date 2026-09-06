@@ -23,6 +23,18 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
+    /// Lightweight ping — không cần auth, không query DB.
+    /// Frontend gọi endpoint này khi mở trang Login để warm up backend
+    /// (Render free tier sleep sau 15 phút).
+    /// </summary>
+    [HttpGet("ping")]
+    [AllowAnonymous]
+    public IActionResult Ping()
+    {
+        return Ok(new { status = "ok", timestamp = DateTime.UtcNow });
+    }
+
+    /// <summary>
     /// Kiểm tra token còn hợp lệ không (dùng cho background validation ở frontend).
     /// Trả 401 tự động nếu token hết hạn hoặc không hợp lệ.
     /// </summary>
