@@ -54,7 +54,8 @@ public class JwtService
                 ValidateAudience = true,
                 ValidAudience = _configuration["Jwt:Audience"],
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                // Keep consistent with Program.cs — 5 minutes of clock-drift tolerance.
+                ClockSkew = TimeSpan.FromMinutes(5)
             }, out SecurityToken validatedToken);
 
             return principal;

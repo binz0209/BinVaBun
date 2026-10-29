@@ -86,7 +86,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
+            // Allow up to 5 minutes of clock drift between the Render container
+            // and the token issuer. TimeSpan.Zero is too strict for free-tier
+            // deployments where container clocks can drift.
+            ClockSkew = TimeSpan.FromMinutes(5)
         };
         
         // Configure SignalR JWT
@@ -231,7 +234,12 @@ app.MapHub<MemoriesApp.Api.Hubs.MemoriesHub>("/memoriesHub");
 
 app.MapControllers();
 
-// Health check endpoint
+// Lightweight liveness probe — no auth, no DB. Used by Render health checks
+// and by the frontend ping to warm up the cold-start container.
+app.MapGet("/healthz", () => Results.Ok(new { status = "ok", utc = DateTime.UtcNow }))
+   .AllowAnonymous();
+
+// ASP.NET built-in health checks (includes MongoDB connectivity, etc.)
 app.MapHealthChecks("/health");
 
 // Seed data and create indexes

@@ -1,14 +1,23 @@
 import axios from 'axios'
 
-// Lấy API URL và loại bỏ BOM character nếu có
+// Strip BOM character if present (common with some env file editors)
 let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 API_URL = API_URL.replace(/^\uFEFF/, '').trim()
 
+// ── Cold-start constants ──────────────────────────────────────────────────────
+// Render free tier can take up to ~30s to cold-start. We give it 60s total.
+const REQUEST_TIMEOUT_MS = 60_000
+const SLOW_BACKEND_TOAST_MS = 3_000
+// HTTP status codes that indicate a transient server-side problem (cold start)
+const RETRYABLE_STATUS = new Set([502, 503, 504])
+const MAX_RETRIES = 3
+const RETRY_BASE_DELAY_MS = 2_000  // doubles each attempt: 2s → 4s → 8s
+
+// ── Axios instance ─────────────────────────────────────────────────────────────
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
+  timeout: REQUEST_TIMEOUT_MS,
+  headers: { 'Content-Type': 'application/json' },
   transformRequest: [(data, headers) => {
     if (data && typeof data === 'object' && !(data instanceof FormData)) {
       headers['Content-Type'] = 'application/json'
@@ -18,48 +27,93 @@ const api = axios.create({
   }]
 })
 
-// ── Request interceptor: đính token + phát sự kiện nếu backend chậm ─────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/** Returns true if the error is a transient network / cold-start problem. */
+function isTransientError(error) {
+  if (!error.response) {
+    // Network-level error (no response): timeout, DNS, TCP refused, etc.
+    return true
+  }
+  return RETRYABLE_STATUS.has(error.response.status)
+}
+
+/** Wait `ms` milliseconds (used for retry backoff). */
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+// ── Request interceptor ───────────────────────────────────────────────────────
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
 
-  // Gắn timer 3 giây: nếu request chưa xong → phát event "backend-slow"
-  // để App.jsx hiện toast "Server đang khởi động..."
-  const slowTimer = setTimeout(() => {
-    window.dispatchEvent(new CustomEvent('backend-slow'))
-  }, 3000)
+  // Track retry state on the config object
+  config._retryCount = config._retryCount ?? 0
 
-  // Lưu timer vào config để response interceptor có thể huỷ
-  config._slowTimer = slowTimer
+  // Fire "backend-slow" toast after SLOW_BACKEND_TOAST_MS on the first attempt
+  if (config._retryCount === 0) {
+    config._slowTimer = setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('backend-slow'))
+    }, SLOW_BACKEND_TOAST_MS)
+  }
 
   return config
 })
 
-// ── Response interceptor: huỷ slow-timer + xử lý 401 ────────────────────────
+// ── Response interceptor ──────────────────────────────────────────────────────
 api.interceptors.response.use(
   (response) => {
-    // Request thành công → huỷ timer (backend đủ nhanh)
+    // Success → cancel the "slow" toast timer
     if (response.config._slowTimer) {
       clearTimeout(response.config._slowTimer)
     }
     return response
   },
-  (error) => {
-    // Huỷ timer dù lỗi
-    if (error.config?._slowTimer) {
-      clearTimeout(error.config._slowTimer)
+  async (error) => {
+    const config = error.config
+
+    // Cancel the slow-toast timer on any final error
+    if (config?._slowTimer) {
+      clearTimeout(config._slowTimer)
     }
 
+    // ── Retry logic: transient errors (cold start / network) ─────────────────
+    if (config && isTransientError(error)) {
+      config._retryCount = (config._retryCount ?? 0) + 1
+
+      if (config._retryCount <= MAX_RETRIES) {
+        const delay = RETRY_BASE_DELAY_MS * Math.pow(2, config._retryCount - 1)
+        console.warn(
+          `[api] Transient error on ${config.url} — retry ${config._retryCount}/${MAX_RETRIES} in ${delay}ms`,
+          error.response?.status ?? error.code
+        )
+        await sleep(delay)
+
+        // Re-attach the token (it may have been set between retries)
+        const token = localStorage.getItem('token')
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`
+        }
+
+        return api(config)
+      }
+    }
+
+    // ── 401 handling: only clear auth when genuinely unauthorised ─────────────
+    // We intentionally do NOT redirect here if the error was transient (network /
+    // 502/503/504) — those have already exhausted retries above. A genuine 401
+    // from the server means the JWT is invalid or expired.
     if (error.response?.status === 401) {
       const currentPath = window.location.pathname
       if (currentPath !== '/login') {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
-        window.location.href = '/login'
+        // Use React-router navigation where possible; fall back to hard redirect.
+        window.dispatchEvent(new CustomEvent('auth-logout-required'))
       }
     }
+
     return Promise.reject(error)
   }
 )
@@ -72,9 +126,9 @@ export const authService = {
   },
 
   /**
-   * validateToken — gọi endpoint nhẹ (GET /auth/me hoặc /auth/validate)
-   * để kiểm tra token còn hạn không.
-   * Chạy ngầm sau khi user đã vào app (không block UI).
+   * validateToken — calls a lightweight protected endpoint to confirm the
+   * stored JWT is still valid. Runs in the background after the user lands on
+   * a private route — does NOT block the UI.
    */
   validateToken: async () => {
     const response = await api.get('/auth/me')
@@ -82,12 +136,15 @@ export const authService = {
   },
 
   /**
-   * pingBackend — gọi endpoint nhẹ không cần auth để warm up backend.
-   * Dùng khi mở trang Login để đánh thức Render free tier.
+   * pingBackend — calls the anonymous /auth/ping endpoint to warm up Render's
+   * free-tier backend before making authenticated requests.
+   * Returns true on success, false on any error (including timeout).
    */
   pingBackend: async () => {
     try {
-      await api.get('/auth/ping')
+      // Use a shorter timeout for the ping itself — we just want to kick
+      // the cold-start, not necessarily wait for a full round-trip.
+      await api.get('/auth/ping', { timeout: REQUEST_TIMEOUT_MS })
       return true
     } catch {
       return false
