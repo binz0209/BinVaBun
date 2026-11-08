@@ -29,6 +29,11 @@ public class PostDto
     public bool IsLiked { get; set; }
     public bool IsOwner { get; set; } // Thêm field để biết có phải chủ bài viết không
     public List<CommentDto> Comments { get; set; } = new();
+
+    // Optional fields when created through the Discord companion bot
+    public string? Title { get; set; }
+    public List<string> Tags { get; set; } = new();
+    public DateTime? MemoryDate { get; set; }
 }
 
 public class CommentDto

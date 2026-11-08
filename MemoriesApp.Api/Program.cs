@@ -121,6 +121,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+// Service-to-service auth for the Discord companion bot. Opt-in per controller via
+// [Authorize(AuthenticationSchemes = "BotKey")]; the default scheme stays JWT.
+builder.Services.AddAuthentication()
+    .AddScheme<Microsoft.AspNetCore.Authentication.AuthenticationSchemeOptions, BotApiKeyAuthenticationHandler>(
+        BotApiKeyAuthenticationHandler.SchemeName, _ => { });
+
 // Add SignalR
 builder.Services.AddSignalR(options =>
 {
@@ -134,6 +140,7 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<SignalRService>();
 builder.Services.AddScoped<CalendarService>();
+builder.Services.AddSingleton<BotMemoryService>();
 
 // Add health checks
 builder.Services.AddHealthChecks();
@@ -248,6 +255,11 @@ using (var scope = app.Services.CreateScope())
     var mongoDb = scope.ServiceProvider.GetRequiredService<MongoDbService>();
     await SeedDataAsync(mongoDb);
     await CreateIndexesAsync(mongoDb);
+
+    // Discord companion bot store: (kind, key) must be unique so claims are atomic.
+    await mongoDb.BotRecords.Indexes.CreateOneAsync(new CreateIndexModel<MemoriesApp.Api.Models.BotRecord>(
+        Builders<MemoriesApp.Api.Models.BotRecord>.IndexKeys.Ascending(r => r.Kind).Ascending(r => r.Key),
+        new CreateIndexOptions { Unique = true }));
 }
 
 app.Run();

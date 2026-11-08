@@ -163,8 +163,11 @@ public class PostsController : ControllerBase
             postDtos.Add(new PostDto
             {
                 Id = p.Id,
+                Title = p.Title,
                 Content = p.Content,
                 Images = p.Images,
+                Tags = p.Tags ?? new(),
+                MemoryDate = p.MemoryDate,
                 AuthorId = p.AuthorId,
                 AuthorName = p.AuthorName,
                 AuthorAvatar = p.AuthorAvatar,
@@ -238,8 +241,11 @@ public class PostsController : ControllerBase
         var postDto = new PostDto
         {
             Id = post.Id,
+            Title = post.Title,
             Content = post.Content,
             Images = post.Images,
+            Tags = post.Tags ?? new(),
+            MemoryDate = post.MemoryDate,
             AuthorId = post.AuthorId,
             AuthorName = post.AuthorName,
             AuthorAvatar = post.AuthorAvatar,

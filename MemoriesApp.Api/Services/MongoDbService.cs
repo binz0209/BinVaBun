@@ -19,5 +19,6 @@ public class MongoDbService
     public IMongoCollection<MemoryPost> Posts => _database.GetCollection<MemoryPost>("posts");
     public IMongoCollection<Notification> Notifications => _database.GetCollection<Notification>("notifications");
     public IMongoCollection<MarkedDate> MarkedDates => _database.GetCollection<MarkedDate>("markedDates");
+    public IMongoCollection<BotRecord> BotRecords => _database.GetCollection<BotRecord>("botRecords");
 }
 

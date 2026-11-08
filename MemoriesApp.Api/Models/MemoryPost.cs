@@ -35,6 +35,21 @@ public class MemoryPost
 
     [BsonElement("comments")]
     public List<Comment> Comments { get; set; } = new();
+
+    // ── Optional fields added for the Discord companion bot. ──
+    // Older documents simply lack them; the web app ignores them.
+    [BsonElement("title")]
+    [BsonIgnoreIfNull]
+    public string? Title { get; set; }
+
+    [BsonElement("tags")]
+    public List<string> Tags { get; set; } = new();
+
+    /// <summary>Calendar date the memory is about (date-only, stored as UTC midnight).</summary>
+    [BsonElement("memoryDate")]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    [BsonIgnoreIfNull]
+    public DateTime? MemoryDate { get; set; }
 }
 
 public class Comment
