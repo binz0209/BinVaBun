@@ -1,6 +1,32 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace BinVaBun.DiscordBot.Configuration;
+
+public class FlexibleIntConverter : TypeConverter
+{
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType) =>
+        sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+
+    public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+    {
+        if (value is string s)
+        {
+            if (s.Contains(','))
+            {
+                var first = s.Split(',')[0].Trim();
+                if (int.TryParse(first, NumberStyles.Integer, CultureInfo.InvariantCulture, out var n))
+                    return n;
+                return 6;
+            }
+            if (int.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var val))
+                return val;
+            return 6;
+        }
+        return base.ConvertFrom(context, culture, value);
+    }
+}
 
 /// <summary>Bound from env vars such as <c>Discord__Token</c>.</summary>
 public sealed class DiscordOptions
@@ -58,8 +84,10 @@ public sealed class CompanionOptions
     public string AnniversaryReminderDays { get; set; } = "7,3,1,0";
 
     /// <summary>If the bot was down at the scheduled time it still posts, but only within this window.</summary>
+    [TypeConverter(typeof(FlexibleIntConverter))]
     public int CatchUpWindowHours { get; set; } = 6;
 
+    [TypeConverter(typeof(FlexibleIntConverter))]
     public int TickSeconds { get; set; } = 30;
 
     public int[] ParseReminderDays()
