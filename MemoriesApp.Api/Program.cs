@@ -11,6 +11,12 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.ResponseCompression;
 
+BinVaBun.DiscordBot.Extensions.DotEnv.Load(
+    Path.Combine(Directory.GetCurrentDirectory(), ".env"),
+    Path.Combine(Directory.GetCurrentDirectory(), "../BinVaBun.DiscordBot/.env"),
+    Path.Combine(Directory.GetCurrentDirectory(), "BinVaBun.DiscordBot/.env")
+);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Support for Render PORT environment variable
@@ -141,6 +147,13 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddScoped<SignalRService>();
 builder.Services.AddScoped<CalendarService>();
 builder.Services.AddSingleton<BotMemoryService>();
+
+// Optional BinVaBun Discord companion bot: runs as a background service inside this API
+var discordToken = builder.Configuration["Discord:Token"] ?? builder.Configuration["Discord__Token"];
+if (!string.IsNullOrWhiteSpace(discordToken))
+{
+    BinVaBun.DiscordBot.Extensions.ServiceCollectionExtensions.AddCompanion(builder.Services, builder.Configuration);
+}
 
 // Add health checks
 builder.Services.AddHealthChecks();

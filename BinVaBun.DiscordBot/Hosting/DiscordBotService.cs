@@ -110,7 +110,7 @@ public sealed class DiscordBotService(
     }
 
     /// <summary>Single place where every failure becomes a friendly message; internals are only logged.</summary>
-    private async Task OnExecutedAsync(ICommandInfo command, IInteractionContext context, IResult result)
+    private async Task OnExecutedAsync(ICommandInfo command, IInteractionContext context, Discord.Interactions.IResult result)
     {
         if (result.IsSuccess) return;
 

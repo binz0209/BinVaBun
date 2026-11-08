@@ -16,7 +16,16 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCompanion(this IServiceCollection services, IConfiguration config)
     {
         services.AddOptions<DiscordOptions>().Bind(config.GetSection(DiscordOptions.Section)).ValidateDataAnnotations().ValidateOnStart();
-        services.AddOptions<ApiOptions>().Bind(config.GetSection(ApiOptions.Section)).ValidateDataAnnotations().ValidateOnStart();
+        services.AddOptions<ApiOptions>().Bind(config.GetSection(ApiOptions.Section)).Configure(opt =>
+        {
+            if (string.IsNullOrWhiteSpace(opt.BotKey))
+                opt.BotKey = config["Bot:ApiKey"] ?? config["BOT_API_KEY"] ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(opt.BaseUrl))
+            {
+                var isDev = (config["ASPNETCORE_ENVIRONMENT"] ?? string.Empty).Equals("Development", StringComparison.OrdinalIgnoreCase);
+                opt.BaseUrl = isDev ? "http://localhost:5000" : "http://localhost:8080";
+            }
+        }).ValidateDataAnnotations().ValidateOnStart();
         services.AddOptions<CompanionOptions>().Bind(config.GetSection(CompanionOptions.Section));
         services.Configure<List<OwnerOptions>>(config.GetSection("Owners"));
 
