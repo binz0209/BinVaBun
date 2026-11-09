@@ -19,11 +19,19 @@ public static class ServiceCollectionExtensions
         services.AddOptions<ApiOptions>().Bind(config.GetSection(ApiOptions.Section)).Configure(opt =>
         {
             if (string.IsNullOrWhiteSpace(opt.BotKey))
-                opt.BotKey = config["Bot:ApiKey"] ?? config["BOT_API_KEY"] ?? string.Empty;
+            {
+                opt.BotKey = config["Api:BotKey"]
+                    ?? config["BOT_API_KEY"]
+                    ?? Environment.GetEnvironmentVariable("Api__BotKey")
+                    ?? Environment.GetEnvironmentVariable("BOT_API_KEY")
+                    ?? Environment.GetEnvironmentVariable("Bot__ApiKey")
+                    ?? config["Bot:ApiKey"]
+                    ?? "020904";
+            }
             if (string.IsNullOrWhiteSpace(opt.BaseUrl))
             {
                 var isDev = (config["ASPNETCORE_ENVIRONMENT"] ?? string.Empty).Equals("Development", StringComparison.OrdinalIgnoreCase);
-                opt.BaseUrl = isDev ? "http://localhost:5000" : "http://localhost:8080";
+                opt.BaseUrl = isDev ? "http://localhost:5000" : "http://127.0.0.1:8080";
             }
         }).ValidateDataAnnotations().ValidateOnStart();
         services.AddOptions<CompanionOptions>().Bind(config.GetSection(CompanionOptions.Section));

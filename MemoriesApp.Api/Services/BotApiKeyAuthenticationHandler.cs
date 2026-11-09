@@ -45,16 +45,44 @@ public class BotApiKeyAuthenticationHandler : AuthenticationHandler<Authenticati
         if (!Request.Headers.TryGetValue(KeyHeader, out var providedValues))
             return AuthenticateResult.NoResult();
 
-        var expected = _configuration["Bot:ApiKey"] ?? Environment.GetEnvironmentVariable("BOT_API_KEY");
-        if (string.IsNullOrWhiteSpace(expected))
-            return AuthenticateResult.Fail("Bot access is not enabled.");
-
         var provided = providedValues.ToString();
-        // Hash both sides so the comparison is constant-time regardless of length.
-        var a = SHA256.HashData(Encoding.UTF8.GetBytes(provided));
-        var b = SHA256.HashData(Encoding.UTF8.GetBytes(expected));
-        if (!CryptographicOperations.FixedTimeEquals(a, b))
+        var providedHash = SHA256.HashData(Encoding.UTF8.GetBytes(provided));
+
+        var candidates = new HashSet<string>(StringComparer.Ordinal);
+        void AddCandidate(string? k)
+        {
+            if (!string.IsNullOrWhiteSpace(k)) candidates.Add(k.Trim());
+        }
+
+        AddCandidate(_configuration["Api:BotKey"]);
+        AddCandidate(_configuration["Bot:ApiKey"]);
+        AddCandidate(_configuration["BOT_API_KEY"]);
+        AddCandidate(Environment.GetEnvironmentVariable("Api__BotKey"));
+        AddCandidate(Environment.GetEnvironmentVariable("Bot__ApiKey"));
+        AddCandidate(Environment.GetEnvironmentVariable("BOT_API_KEY"));
+
+        if (candidates.Count == 0)
+        {
+            Logger.LogWarning("Bot access is not enabled: no bot API key is configured.");
+            return AuthenticateResult.Fail("Bot access is not enabled.");
+        }
+
+        var matched = false;
+        foreach (var candidate in candidates)
+        {
+            var candidateHash = SHA256.HashData(Encoding.UTF8.GetBytes(candidate));
+            if (CryptographicOperations.FixedTimeEquals(providedHash, candidateHash))
+            {
+                matched = true;
+                break;
+            }
+        }
+
+        if (!matched)
+        {
+            Logger.LogWarning("BotApiKeyAuthenticationHandler: Invalid bot key provided. Header length: {Length}", provided.Length);
             return AuthenticateResult.Fail("Invalid bot key.");
+        }
 
         var username = Request.Headers[UserHeader].ToString();
         if (string.IsNullOrWhiteSpace(username))
